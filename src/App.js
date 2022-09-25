@@ -1,25 +1,21 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import AddTodo from './components/AddTodo'
+import FilterTodo from './components/FilterTodo'
+import TodoListItem from './components/TodoListItem'
 
-function App() {
+export default function App()
+{
+  const [todoList, setTodoList] = useState([])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='grid gap-4 py-10' style={{maxWidth: '500px', margin: 'auto'}}>
+      <AddTodo todoList={todoList} setTodoList={setTodoList} />
+      <FilterTodo />
+      <div className='border-b overflow-y-auto' style={{maxHeight: '500px'}}>
+        {todoList.map((item, index)=>(
+          <TodoListItem text={item} key={index}/>
+        ))}
+      </div>
     </div>
-  );
+  )
 }
-
-export default App;
