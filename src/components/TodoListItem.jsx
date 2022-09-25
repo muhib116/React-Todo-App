@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-export default function TodoList({text})
+export default function TodoList({todoItem, todoList, setTodoList})
 {
-  const [dropdownBg, setDropdownBg] = useState('bg-gray-200')
+  const [isComplete, setIsComplete] = useState(false)
+  const [dropdownBg, setDropdownBg] = useState('bg-gray-100')
   const filterArray = [
     {
       name: 'to do',
-      color: 'bg-grey-100',
+      color: 'bg-gray-100',
       selected: true
     }, 
     {
@@ -20,7 +21,7 @@ export default function TodoList({text})
       selected: false
     },
     {
-      name: 'compete',
+      name: 'complete',
       color: 'bg-green-100',
       selected: false
     },
@@ -31,19 +32,43 @@ export default function TodoList({text})
     }
   ]
 
-  const handleDropdown = (e) => {
+  useEffect(() => {
+    setDropdownBg(filterArray.find((item)=>item.name === todoItem.status)?.color)
+  }, [todoItem])
+  
+
+  const handleDropdown = (e) => 
+  {
     const target = e.target
     filterArray.forEach(item=>{
       if(item.name === target.value){
         setDropdownBg(item.color)
       }
     })
+    
+    // work with is complete
+    setIsComplete(target.value === 'complete')
+
+    // work with delete
+    if(target.value === 'delete'){
+      const filteredArray = todoList.filter(item=>item.text !== todoItem.text)
+      setTodoList(filteredArray)
+    }
+
+    // work with bg color
+    todoList.forEach((item)=>{
+      if(item.text === todoItem.text){
+        todoItem.bg = filterArray.find(x=>x.name===target.value).color
+      }
+    })
+
+    todoItem.status = target.value
   }
 
   return (
-    <div className='flex gap-2 py-2 px-3 border border-b-0'>
-      <p className='truncate'>{text}</p>
-      <select onChange={handleDropdown} className={[dropdownBg, 'text-xs', 'outline-none', 'text-center', 'ml-auto'].join(' ')}>
+    <div className={['flex gap-2 py-2 px-3 border border-b-0', dropdownBg, isComplete&&'line-through'].join(' ')}>
+      <p className='truncate'>{todoItem.text}</p>
+      <select onChange={handleDropdown} className='text-xs outline-none text-center ml-auto bg-transparent text-right'>
         {filterArray.map((item, index)=>(
           <option value={item.name} key={index}>{item.name.toUpperCase()}</option>
         ))}

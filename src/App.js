@@ -13,7 +13,7 @@ export default function App()
       <FilterTodo />
       <div className='border-b overflow-y-auto' style={{maxHeight: '500px'}}>
         {todoList.map((item, index)=>(
-          <TodoListItem text={item} key={index}/>
+          <TodoListItem todoItem={item} key={Math.random()*1000000} todoList={todoList} setTodoList={setTodoList}/>
         ))}
       </div>
     </div>

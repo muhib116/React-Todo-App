@@ -8,7 +8,7 @@ export default function AddTodo({todoList, setTodoList})
     setTodoText(target.value)
   }
   const addToTodoList = ()=>{
-    setTodoList([TodoText, ...todoList])
+    setTodoList([{text:TodoText, status: 'test'}, ...todoList])
     setTodoText('')
   }
 
